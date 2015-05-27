@@ -1,83 +1,53 @@
 package modelo;
-import java.sql.DriverManager;
+
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 
-
 public class ConexionDB {
-	// DATOS DE LA CONEXION
-	static final String CONTROLADOR_MYSQL= "com.mysql.jdbc.Driver";
+
+	//DATOS DE LA CONEXION
+	static final String CONTROLADOR_MYSQL="com.mysql.jdbc.Driver";
 	
-	//DATOS POR DEFECTO
-	private static final String HOST="localhost";
-	private static final String BBDD="thelaby";
-	private static final String USER="root";
-	private static final String PASS="";
-	
-	//DATOS DE LA BBDD
+	//DATOS DE LA BASE DE DATOS
 	private String host;
 	private String bbdd;
 	private String user;
-	private String pass;
-	private String url;
+	private String password;
 	
-	//Conexion
-	private static Connection conexion = null;// maneja la conexió
+	//CONEXION
+	static Connection conexion = null; //MANEJA LA CONEXION
 	
-	//Instancia unica
-	private static ConexionDB instance = null;
-	
-	private ConexionDB(String HOST,String BBDD,String USER,String PASS) {
-		this.host=HOST;
-		this.bbdd=BBDD;
-		this.user=USER;
-		this.pass=PASS;
-		this.url="jdbc:mysql://"+this.host+"/"+this.bbdd;
+	public ConexionDB(String host,String bbdd,String user,String password) {
+		
+		this.host=host;
+		this.bbdd=bbdd;
+		this.user=user;
+		this.password=password;
 	}
 	
-	//Implementar SingleTon
-	public static ConexionDB getInstance(String HOST,String BBDD,String USER,String PASS) {
-	      if(instance == null) {
-	         instance = null;
-	      }
-	      return instance;
-	   }
-	//Este método es el mismo que el anterior pero no es necesario
-	//pasar parámetros de base de datos ya que toma los
-	//valores por defecto
-	public static ConexionDB getInstance() {
-	      if(instance == null) {
-	         instance = null;
-	      }
-	      return instance;
-	  }
-	
-	//Metodo que permite la conexion a la base de datos
-	public boolean connectDB(){
+	public boolean conectDB (){
 		try{
-			//Lo primero es cargar el controlador MySQL el cual automáticamente se registra
+			//LO PRIMERO ES CARGAR EL CONTROLADOR MYSQL EL CUAL AUTOMATICAMENTE SE REGISTRA
 			Class.forName(CONTROLADOR_MYSQL);
-			//Conectarnos a la BBDD
-			conexion = DriverManager.getConnection(this.url,this.user,this.pass);
-		}
-		catch( SQLException excepcionSql ) 
-		{
-			excepcionSql.printStackTrace();
+			
+			//CONECTAREMOSA A LA BASE DE DATOS
+			conexion=DriverManager.getConnection("jdbc:mysql://"+this.host+"/"+this.bbdd,this.user,this.password);
+			}
+		catch(SQLException sqlException){
+			sqlException.printStackTrace();
 			return false;
 		}
-		catch( ClassNotFoundException noEncontroClase)
-		{
-			noEncontroClase.printStackTrace();
+		catch(ClassNotFoundException claseNoEncontrada){
+			claseNoEncontrada.printStackTrace();
 			return false;
 		}
 		return true;
-	}
-	
-	//Metodo que devuelve la conexion a la base de datos
+		
+		}
+
 	public static Connection getConexion(){
 		return conexion;
 	}
-
 }
-

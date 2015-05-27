@@ -18,7 +18,7 @@ public class IngresoLaby {
 
 	public IngresoLaby() {
 		//Obtenemos la conexion de datos
-		conexion=ConexionDB.getConexion();		
+		//conexion=ConexionDB.getConexion();		
 	}
 	
 	public String getCod(int id,String apellido){
